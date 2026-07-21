@@ -41,6 +41,7 @@
       "wezterm"
       "claude-code"
       "cursor-cli"
+      "codex"
     ];
   };
 }
