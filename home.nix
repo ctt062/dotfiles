@@ -18,6 +18,7 @@ in
     neovim
     # the font everything renders in
     nerd-fonts.hack
+    unzip
   ];
   fonts.fontconfig.enable = true;
   home.sessionVariables.EDITOR = "nvim";
@@ -26,6 +27,16 @@ in
   home.sessionPath = [
     "$HOME/.local/bin"
   ];
+
+  # === ADD THIS (for OpenCode) ===
+  home.activation = {
+    installOpencode = config.lib.dag.entryAfter [ "writeBoundary" ] ''
+      if ! command -v opencode >/dev/null 2>&1; then
+        echo "Installing Opencode..."
+        ${pkgs.curl}/bin/curl -fsSL https://opencode.ai/install | bash
+      fi
+    '';
+  };
 
   programs.zsh = {
     enable = true;
