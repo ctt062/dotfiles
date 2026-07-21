@@ -21,6 +21,11 @@ in
   ];
   fonts.fontconfig.enable = true;
   home.sessionVariables.EDITOR = "nvim";
+  
+  # === ADD THIS (for Cursor CLI) ===
+  home.sessionPath = [
+    "$HOME/.local/bin"
+  ];
 
   programs.zsh = {
     enable = true;
@@ -37,6 +42,15 @@ in
       m = "git switch main";
       cc = "claude --dangerously-skip-permissions";
       co = "codex --full-auto";
+      ca = "cursor-agent";
+    };
+  };
+
+  programs.git = {
+    enable = true;
+    settings.user = {
+      name = "ctt062";
+      email = "chongtt062@gmail.com";
     };
   };
 
