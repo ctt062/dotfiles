@@ -24,6 +24,8 @@ in
   home.sessionVariables.EDITOR = "nvim";
   
   # no-mistakes / treehouse land binaries here; Cursor CLI uses it too.
+  # home.sessionPath alone is not enough on macOS: /etc/zprofile's path_helper
+  # rebuilds PATH after ~/.zshenv and drops $HOME/.local/bin for login shells.
   home.sessionPath = [
     "$HOME/.local/bin"
   ];
@@ -35,15 +37,24 @@ in
       export PATH="${pkgs.git}/bin:/opt/homebrew/bin:$HOME/.local/bin:$PATH"
       curl=${pkgs.curl}/bin/curl
       git=${pkgs.git}/bin/git
+      mkdir -p "$HOME/.local/bin"
 
-      if ! command -v no-mistakes >/dev/null 2>&1; then
+      # Prefer the real install locations over command -v (PATH is unreliable here).
+      if [ ! -x "$HOME/.local/bin/no-mistakes" ] && [ ! -x "$HOME/.no-mistakes/bin/no-mistakes" ]; then
         echo "Installing no-mistakes..."
         "$curl" -fsSL https://raw.githubusercontent.com/kunchenguid/no-mistakes/main/docs/install.sh | sh
       fi
+      if [ -x "$HOME/.no-mistakes/bin/no-mistakes" ] && [ ! -e "$HOME/.local/bin/no-mistakes" ]; then
+        ln -sfn "$HOME/.no-mistakes/bin/no-mistakes" "$HOME/.local/bin/no-mistakes"
+      fi
 
-      if ! command -v treehouse >/dev/null 2>&1; then
+      if [ ! -x "$HOME/.local/bin/treehouse" ]; then
         echo "Installing treehouse..."
         "$curl" -fsSL https://kunchenguid.github.io/treehouse/install.sh | sh
+      fi
+      if [ ! -x "$HOME/.local/bin/treehouse" ]; then
+        echo "error: treehouse install finished but $HOME/.local/bin/treehouse is missing" >&2
+        exit 1
       fi
 
       if command -v npm >/dev/null 2>&1; then
@@ -69,7 +80,12 @@ in
     enable = true;
     autosuggestion.enable = true;      # ghost text from history
     syntaxHighlighting.enable = true;  # commands turn green when valid
+    # profileExtra runs after macOS path_helper in login shells.
+    profileExtra = ''
+      path=("$HOME/.local/bin" $path)
+    '';
     initContent = ''
+      path=("$HOME/.local/bin" $path)
       bindkey '^f' autosuggest-accept
     '';
     shellAliases = {
