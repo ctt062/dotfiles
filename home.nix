@@ -23,17 +23,44 @@ in
   fonts.fontconfig.enable = true;
   home.sessionVariables.EDITOR = "nvim";
   
-  # === ADD THIS (for Cursor CLI) ===
+  # no-mistakes / treehouse land binaries here; Cursor CLI uses it too.
   home.sessionPath = [
     "$HOME/.local/bin"
   ];
 
-  # === ADD THIS (for OpenCode) ===
+  # Tools that are not clean Homebrew/Nix packages (curl installers, npm globals, git clone).
+  # Homebrew packages from configuration.nix are available by the time this runs on switch.
   home.activation = {
-    installOpencode = config.lib.dag.entryAfter [ "writeBoundary" ] ''
-      if ! command -v opencode >/dev/null 2>&1; then
-        echo "Installing Opencode..."
-        ${pkgs.curl}/bin/curl -fsSL https://opencode.ai/install | bash
+    installExtraTools = config.lib.dag.entryAfter [ "writeBoundary" ] ''
+      export PATH="${pkgs.git}/bin:/opt/homebrew/bin:$HOME/.local/bin:$PATH"
+      curl=${pkgs.curl}/bin/curl
+      git=${pkgs.git}/bin/git
+
+      if ! command -v no-mistakes >/dev/null 2>&1; then
+        echo "Installing no-mistakes..."
+        "$curl" -fsSL https://raw.githubusercontent.com/kunchenguid/no-mistakes/main/docs/install.sh | sh
+      fi
+
+      if ! command -v treehouse >/dev/null 2>&1; then
+        echo "Installing treehouse..."
+        "$curl" -fsSL https://kunchenguid.github.io/treehouse/install.sh | sh
+      fi
+
+      if command -v npm >/dev/null 2>&1; then
+        echo "Ensuring gh-axi and lavish-axi are installed globally..."
+        npm install -g gh-axi lavish-axi
+        # PromptScript has no global skills dir; target agents that do.
+        npx --yes skills add kunchenguid/gh-axi --skill gh-axi -y -g \
+          --agent claude-code cursor codex opencode || true
+        npx --yes skills add kunchenguid/lavish-axi --skill lavish -y -g \
+          --agent claude-code cursor codex opencode || true
+      else
+        echo "npm not on PATH yet (Homebrew node); skip gh-axi/lavish-axi until next rebuild."
+      fi
+
+      if [ ! -d "$HOME/firstmate/.git" ]; then
+        echo "Cloning firstmate into ~/firstmate..."
+        "$git" clone https://github.com/kunchenguid/firstmate "$HOME/firstmate"
       fi
     '';
   };

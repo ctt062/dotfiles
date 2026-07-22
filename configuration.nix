@@ -36,35 +36,18 @@
     onActivation.extraFlags = [ "--force" ];
     brews = [
       "herdr"
+      "gnhf"
+      "node"
+      "gh"
+      "tmux"
+      "opencode"
     ];
     casks = [
       "wezterm"
       "claude-code"
       "cursor-cli"
       "codex"
+      "opensuperwhisper"
     ];
-  };
- 
-  # for opencode
-  system.activationScripts = {
-    opencode = {
-      text = ''
-        echo "=== Running post-activation scripts ==="
-
-        # Ensure unzip is available
-        if ! command -v unzip >/dev/null 2>&1; then
-          echo "Installing unzip via Nix..."
-          /nix/var/nix/profiles/default/bin/nix-env -iA nixpkgs.unzip
-        fi
-
-        # Install Opencode if not present
-        if ! command -v opencode >/dev/null 2>&1; then
-          echo "Installing Opencode..."
-          curl -fsSL https://opencode.ai/install | bash
-        else
-          echo "Opencode already installed."
-        fi
-      '';
-    };
   };
 }
