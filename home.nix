@@ -8,6 +8,13 @@ in
   home.username = user;
   home.homeDirectory = "/Users/${user}";
   home.stateVersion = "24.11";
+
+  # Same Determinate Nix options.json warning as nix-darwin docs; manpages
+  # default on and rebuild options.json on every switch.
+  manual.manpages.enable = false;
+  manual.html.enable = false;
+  manual.json.enable = false;
+
   home.packages = with pkgs; [
     # cli i use constantly
     ripgrep   # fast search
@@ -83,6 +90,10 @@ in
     # profileExtra runs after macOS path_helper in login shells.
     profileExtra = ''
       path=("$HOME/.local/bin" $path)
+      # Keep the Python.org 3.11 framework install on PATH when present.
+      if [ -d /Library/Frameworks/Python.framework/Versions/3.11/bin ]; then
+        path=("/Library/Frameworks/Python.framework/Versions/3.11/bin" $path)
+      fi
     '';
     initContent = ''
       path=("$HOME/.local/bin" $path)
@@ -137,6 +148,20 @@ in
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/AGENTS.md";
   home.file.".config/opencode/AGENTS.md".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/AGENTS.md";
+  # Cursor does not treat ~/.cursor/AGENTS.md as a documented global rules source.
+  # Keep the symlink as the live file agents are told to Read, and also install a
+  # local Cursor plugin with an alwaysApply rule so every Agent chat gets it.
   home.file.".cursor/AGENTS.md".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/AGENTS.md";
+  home.file.".cursor/plugins/local/global-agents".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.cursor/plugins/global-agents";
+
+  # Keep the Cursor alwaysApply snapshot aligned with home/AGENTS.md on every switch.
+  home.activation.syncCursorGlobalAgentsRule =
+    config.lib.dag.entryAfter [ "writeBoundary" ] ''
+      ${pkgs.python3}/bin/python3 \
+        "${dotfiles}/home/.cursor/plugins/global-agents/sync-rule.py" \
+        "${dotfiles}/home/AGENTS.md" \
+        "${dotfiles}/home/.cursor/plugins/global-agents/rules/global-agent-instructions.mdc"
+    '';
 }

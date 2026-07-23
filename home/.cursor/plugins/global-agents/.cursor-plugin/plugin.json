@@ -1,0 +1,6 @@
+{
+  "name": "global-agents",
+  "description": "Always-on global agent policy from home/AGENTS.md",
+  "version": "1.0.0",
+  "author": { "name": "ctt" }
+}

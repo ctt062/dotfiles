@@ -30,6 +30,8 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            # Ad-hoc files (e.g. installer-written ~/.zprofile) must not block switch.
+            home-manager.backupFileExtension = "bak";
             home-manager.extraSpecialArgs = { inherit user; };
             home-manager.users.${user} = import ./home.nix;
           }

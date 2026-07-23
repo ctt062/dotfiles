@@ -4,6 +4,13 @@
   # Determinate already manages the Nix daemon, so nix-darwin shouldn't.
   nix.enable = false;
 
+  # Skip nix-darwin's documentation module entirely. Its `let` binding always
+  # evaluates options.json even when documentation.enable = false, and Determinate
+  # Nix warns about that derivation's missing store-path context (upstream:
+  # home-manager#7935 / nixpkgs make-options-doc). Package man pages from brew
+  # and nixpkgs are unaffected.
+  disabledModules = [ "documentation" ];
+
   nixpkgs.config.allowUnfree = true;
   nixpkgs.hostPlatform = "aarch64-darwin"; # use x86_64-darwin for Intel CPU
 

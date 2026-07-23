@@ -1,3 +1,16 @@
+---
+description: Global agent instructions from home/AGENTS.md - always apply; read live file before any work
+alwaysApply: true
+---
+
+# Mandatory first step
+
+Before any other tools or answers, read `~/.cursor/AGENTS.md` with the Read tool and follow it for the rest of this conversation.
+
+That path is a symlink to `~/.dotfiles/home/AGENTS.md`, the single source of truth for global agent policy on this machine. If the live file differs from the snapshot below, the live file wins.
+
+# Snapshot of home/AGENTS.md
+
 # Global agent instructions
 
 Read and follow this file before doing any work.
@@ -27,4 +40,3 @@ For Cursor specifically: `~/.cursor/AGENTS.md` alone is not a documented global 
 2. Cursor User Rules (Customize → Rules), which should point agents at `~/.cursor/AGENTS.md` first.
 
 After the first plugin install or a plugin change, reload Cursor (Developer: Reload Window).
-
