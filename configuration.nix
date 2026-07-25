@@ -39,8 +39,14 @@
   homebrew = {
     enable = true;
     onActivation.cleanup = "zap";  # remove anything not listed here
+    # autoUpdate only refreshes formulae metadata; upgrade actually installs newer
+    # versions. Without upgrade=true, brew bundle is invoked with --no-upgrade, so
+    # claude-code / codex / etc. stay pinned at whatever was first installed.
     onActivation.autoUpdate = true;
+    onActivation.upgrade = true;
     onActivation.extraFlags = [ "--force" ];
+    # Force cask upgrades even when Homebrew marks them auto-updating/unversioned.
+    greedyCasks = true;
     brews = [
       "herdr"
       "gnhf"

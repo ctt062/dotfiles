@@ -63,13 +63,21 @@ Edit files in this repo, then:
 ./rebuild.sh
 ```
 
-Configs under `home/` are symlinked live with `mkOutOfStoreSymlink`, so Neovim / WezTerm / herdr / agent policy edits take effect without a rebuild. Run `./rebuild.sh` when you change packages, system defaults, or `home.nix` / `configuration.nix` / `flake.nix`.
+That command:
+
+1. Runs `nix flake update` (latest nixpkgs / nix-darwin / home-manager)
+2. Runs `darwin-rebuild switch`
+3. Upgrades all declared Homebrew brews/casks (`onActivation.upgrade` + `greedyCasks`)
+4. Refreshes extra tools from `home.nix` activation (no-mistakes, treehouse, gh-axi, lavish-axi, firstmate)
+
+Configs under `home/` are symlinked live with `mkOutOfStoreSymlink`, so Neovim / WezTerm / herdr / agent policy edits take effect without a rebuild. Run `./rebuild.sh` when you change packages, system defaults, or `home.nix` / `configuration.nix` / `flake.nix`. Commit `flake.lock` when an update looks good.
 
 ## Important knobs
 
 - **Username**: `user = "ctt";` in `flake.nix` (bootstrap can rewrite it)
 - **Host label**: `"mac"` must match in `flake.nix`, `rebuild.sh`, and `bootstrap.sh`
 - **Homebrew zap**: `homebrew.onActivation.cleanup = "zap"` removes anything not listed in `brews` / `casks`. Add packages you want to keep before switching.
+- **Homebrew upgrades**: `onActivation.autoUpdate` only refreshes formulae metadata; `onActivation.upgrade = true` is what actually upgrades Claude Code, Codex, etc.
 - **Agent policy**: `home/AGENTS.md` is installed for Claude, Codex, Cursor, and opencode. Cursor also gets a local `global-agents` plugin so the policy is always applied; reload Cursor after the first install.
 - **Shell aliases**: `cc` → claude, `co` → codex, `ca` → cursor-agent
 

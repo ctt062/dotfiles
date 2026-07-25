@@ -1,7 +1,20 @@
-{ config, pkgs, user, ... }:
+{ config, lib, pkgs, user, ... }:
 
 let
   dotfiles = "${config.home.homeDirectory}/.dotfiles";
+  # Activation PATH is minimal and defaults to macOS bash 3.2 + BSD userland.
+  # Home Manager needs bash >= 4.2 (`[[ -v ]]`), GNU readlink -e, and GNU find
+  # -printf. Also ship tools that downstream install scripts call by bare name.
+  extraToolsPath = lib.makeBinPath [
+    pkgs.bash
+    pkgs.coreutils
+    pkgs.findutils
+    pkgs.curl
+    pkgs.git
+    pkgs.gnutar
+    pkgs.gzip
+    pkgs.unzip
+  ];
 in
 
 {
@@ -39,33 +52,35 @@ in
 
   # Tools that are not clean Homebrew/Nix packages (curl installers, npm globals, git clone).
   # Homebrew packages from configuration.nix are available by the time this runs on switch.
+  # Re-run installers / pulls on every switch so these stay current alongside brew upgrades.
   home.activation = {
+    # Must run before checkLinkTargets/linkGeneration so GNU readlink -e works.
+    ensureActivationPath = config.lib.dag.entryBefore [ "checkFilesChanged" ] ''
+      export PATH="${extraToolsPath}:/opt/homebrew/bin:/usr/bin:/bin:$HOME/.local/bin:$PATH"
+    '';
+
     installExtraTools = config.lib.dag.entryAfter [ "writeBoundary" ] ''
-      export PATH="${pkgs.git}/bin:/opt/homebrew/bin:$HOME/.local/bin:$PATH"
-      curl=${pkgs.curl}/bin/curl
-      git=${pkgs.git}/bin/git
       mkdir -p "$HOME/.local/bin"
 
-      # Prefer the real install locations over command -v (PATH is unreliable here).
-      if [ ! -x "$HOME/.local/bin/no-mistakes" ] && [ ! -x "$HOME/.no-mistakes/bin/no-mistakes" ]; then
-        echo "Installing no-mistakes..."
-        "$curl" -fsSL https://raw.githubusercontent.com/kunchenguid/no-mistakes/main/docs/install.sh | sh
+      echo "Updating no-mistakes..."
+      # Install script ends with `daemon restart`, which can fail outside a
+      # no-mistakes repo (gate_context). Treat the binary as the success signal.
+      curl -fsSL https://raw.githubusercontent.com/kunchenguid/no-mistakes/main/docs/install.sh | sh || true
+      if [ ! -x "$HOME/.no-mistakes/bin/no-mistakes" ]; then
+        echo "error: no-mistakes missing after install" >&2
+        exit 1
       fi
-      if [ -x "$HOME/.no-mistakes/bin/no-mistakes" ] && [ ! -e "$HOME/.local/bin/no-mistakes" ]; then
-        ln -sfn "$HOME/.no-mistakes/bin/no-mistakes" "$HOME/.local/bin/no-mistakes"
-      fi
+      ln -sfn "$HOME/.no-mistakes/bin/no-mistakes" "$HOME/.local/bin/no-mistakes"
 
-      if [ ! -x "$HOME/.local/bin/treehouse" ]; then
-        echo "Installing treehouse..."
-        "$curl" -fsSL https://kunchenguid.github.io/treehouse/install.sh | sh
-      fi
+      echo "Updating treehouse..."
+      curl -fsSL https://kunchenguid.github.io/treehouse/install.sh | sh || true
       if [ ! -x "$HOME/.local/bin/treehouse" ]; then
         echo "error: treehouse install finished but $HOME/.local/bin/treehouse is missing" >&2
         exit 1
       fi
 
       if command -v npm >/dev/null 2>&1; then
-        echo "Ensuring gh-axi and lavish-axi are installed globally..."
+        echo "Updating gh-axi and lavish-axi..."
         npm install -g gh-axi lavish-axi
         # PromptScript has no global skills dir; target agents that do.
         npx --yes skills add kunchenguid/gh-axi --skill gh-axi -y -g \
@@ -76,9 +91,12 @@ in
         echo "npm not on PATH yet (Homebrew node); skip gh-axi/lavish-axi until next rebuild."
       fi
 
-      if [ ! -d "$HOME/firstmate/.git" ]; then
+      if [ -d "$HOME/firstmate/.git" ]; then
+        echo "Updating firstmate..."
+        git -C "$HOME/firstmate" pull --ff-only || true
+      else
         echo "Cloning firstmate into ~/firstmate..."
-        "$git" clone https://github.com/kunchenguid/firstmate "$HOME/firstmate"
+        git clone https://github.com/kunchenguid/firstmate "$HOME/firstmate"
       fi
     '';
   };
