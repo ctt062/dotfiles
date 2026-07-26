@@ -7,7 +7,10 @@ Read and follow this file before doing any work. This is mandatory for every age
 ## Rules
 
 - Never use the em dash "—". Use plain dash "-" instead.
-- Never add yourself (or any AI / agent) as a git co-author. Do not use `Co-authored-by`, `Co-Authored-By`, `--trailer`, or similar attribution in commit messages or PR bodies unless the user explicitly asks for it. This applies to Cursor, Claude, Codex, opencode, and every other agent identity.
+- Never add yourself (or any AI / agent) as a git co-author unless the user explicitly asks for it. This applies to Cursor, Claude, Codex, opencode, and every other agent identity.
+  - Do not pass `--trailer "Co-authored-by: ..."` (or any `Co-authored-by` / `Co-Authored-By` text) to `git commit`.
+  - Forbidden example: `git commit --trailer "Co-authored-by: Cursor <cursoragent@cursor.com>"`.
+  - Commit with only `-m` / HEREDOC message body. No agent attribution trailers in commits or PR bodies.
 - Never manually modify CHANGELOG.md files or any files marked as auto-generated.
 - When making technical decisions, do not give much weight to development cost. Prefer quality, simplicity, robustness, scalability, and long-term maintainability.
 - When fixing bugs, always start by reproducing the bug in an E2E setting as close as possible to how an end user would experience it, so the fix addresses the real problem.

@@ -29,6 +29,10 @@ generated = re.compile(
     r"^(🤖\s*)?Generated with\b.*(Claude|Cursor|Codex|OpenCode)\b",
     re.IGNORECASE,
 )
+made_with = re.compile(
+    r"^(Made-with|Made with)\s*:\s*Cursor\b",
+    re.IGNORECASE,
+)
 
 out = []
 for line in text:
@@ -36,7 +40,7 @@ for line in text:
     m = coauthor.match(body)
     if m and agent_line.search(m.group(1)):
         continue
-    if generated.match(body):
+    if generated.match(body) or made_with.match(body):
         continue
     out.append(line)
 

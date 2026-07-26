@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Strip AI/agent attribution trailers early (covers Cursor programmatic injection).
+set -euo pipefail
+msg_file="${1:-}"
+[[ -n "${msg_file}" && -f "${msg_file}" ]] || exit 0
+# Reuse commit-msg stripper logic
+hook_dir="$(cd "$(dirname "$0")" && pwd)"
+if [[ -x "${hook_dir}/commit-msg" ]]; then
+  "${hook_dir}/commit-msg" "${msg_file}"
+fi

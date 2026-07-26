@@ -187,4 +187,10 @@ in
         "${dotfiles}/home/AGENTS.md" \
         "${dotfiles}/home/.cursor/plugins/global-agents/rules/global-agent-instructions.mdc"
     '';
+
+  # Re-apply Cursor CLI/IDE attribution-off so rebuild keeps Co-authored-by trailers disabled.
+  home.activation.syncCursorAttribution =
+    config.lib.dag.entryAfter [ "writeBoundary" ] ''
+      bash "${dotfiles}/home/scripts/sync-cursor-attribution.sh"
+    '';
 }

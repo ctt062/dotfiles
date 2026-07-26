@@ -79,7 +79,7 @@ Configs under `home/` are symlinked live with `mkOutOfStoreSymlink`, so Neovim /
 - **Homebrew zap**: `homebrew.onActivation.cleanup = "zap"` removes anything not listed in `brews` / `casks`. Add packages you want to keep before switching.
 - **Homebrew upgrades**: `onActivation.autoUpdate` only refreshes formulae metadata; `onActivation.upgrade = true` is what actually upgrades Claude Code, Codex, etc.
 - **Agent policy**: `home/AGENTS.md` is installed for Claude, Codex, Cursor, and opencode. Cursor also gets a local `global-agents` plugin so the policy is always applied; reload Cursor after the first install.
-- **No agent co-authors**: global `~/.config/git/hooks/commit-msg` strips AI `Co-authored-by` trailers; Claude `attribution.commit/pr` are empty. Soft policy lives in `home/AGENTS.md`.
+- **No agent co-authors**: every rebuild runs `home/scripts/sync-cursor-attribution.sh` (Cursor CLI + IDE attribution off), keeps Claude `attribution` empty, and installs global git hooks that strip AI `Co-authored-by` / `Made-with: Cursor` trailers. Soft policy lives in `home/AGENTS.md`.
 - **AXI skills**: every rebuild runs `home/scripts/sync-axi-skills.sh` so `gh-axi`, `lavish`, and `no-mistakes` are installed and linked for Claude, Codex, Cursor, and opencode. Agents should prefer AXI over MCP / raw `gh` for those jobs.
 - **Shell aliases**: `cc` → claude, `co` → codex, `ca` → cursor-agent, `nm` → no-mistakes (overrides macOS `nm`)
 
