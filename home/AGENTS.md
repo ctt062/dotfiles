@@ -1,18 +1,23 @@
 # Global agent instructions
 
-Read and follow this file before doing any work.
+Read and follow this file before doing any work. This is mandatory for every agent on this machine (Claude Code, Codex, Cursor, opencode, and any other agent harness).
 
-This is the shared policy for every agent on this machine. `home.nix` installs it for Claude (`~/.claude/CLAUDE.md`), Codex, Cursor, and opencode.
+`home.nix` installs this file for Claude (`~/.claude/CLAUDE.md`), Codex (`~/.codex/AGENTS.md`), Cursor (`~/.cursor/AGENTS.md`), and opencode (`~/.config/opencode/AGENTS.md`).
 
 ## Rules
 
 - Never use the em dash "—". Use plain dash "-" instead.
-- When writing commit messages, never auto-add your agent name as a co-author. (I do not want to see Co-authored-by: Cursor <cursoragent@cursor.com> in the commit message)
+- Never add yourself (or any AI / agent) as a git co-author. Do not use `Co-authored-by`, `Co-Authored-By`, `--trailer`, or similar attribution in commit messages or PR bodies unless the user explicitly asks for it. This applies to Cursor, Claude, Codex, opencode, and every other agent identity.
 - Never manually modify CHANGELOG.md files or any files marked as auto-generated.
 - When making technical decisions, do not give much weight to development cost. Prefer quality, simplicity, robustness, scalability, and long-term maintainability.
 - When fixing bugs, always start by reproducing the bug in an E2E setting as close as possible to how an end user would experience it, so the fix addresses the real problem.
 - When end-to-end testing a product, be picky about the UI and obsess over pixel perfection. If something clearly looks off, even if it is unrelated to the current task, fix it along the way.
 - Apply the same standard to engineering excellence: lint failures, test failures, and flakiness. If you see one, even if it is unrelated to the current task, fix it.
+- Prefer AXI over MCP and raw vendor CLIs for the same job:
+  - GitHub: `gh-axi` (not `gh`, not GitHub MCP)
+  - Visual review artifacts: `lavish-axi`
+  - Validation / shipping gates: `no-mistakes axi ...`
+  If an AXI skill is available, follow that skill.
 - Before using "dynamic workflows", "ultra code", or any harness feature that immediately spawns a large swarm of subagents, explain the tradeoffs and ask the user for explicit approval.
 
 ## Maintaining this file
@@ -25,6 +30,7 @@ For Cursor specifically: `~/.cursor/AGENTS.md` alone is not a documented global 
 
 1. The local Cursor plugin at `home/.cursor/plugins/global-agents` (`alwaysApply` rule that requires reading this file first). `home.nix` symlinks it to `~/.cursor/plugins/local/` and regenerates the rule snapshot on every `./rebuild.sh`.
 2. Cursor User Rules (Customize → Rules), which should point agents at `~/.cursor/AGENTS.md` first.
+   Keep User Rules free of raw `gh` / GitHub MCP instructions - those belong in this file as AXI.
+   If a User Rule conflicts with this file on GitHub, lavish, no-mistakes, or commit attribution, follow this file.
 
 After the first plugin install or a plugin change, reload Cursor (Developer: Reload Window).
-

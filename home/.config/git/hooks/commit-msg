@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+# Strip AI/agent Co-authored-by trailers from commit messages.
+# Installed globally via home.nix (core.hooksPath). Chains to repo-local hooks.
+set -euo pipefail
+
+msg_file="${1:-}"
+if [[ -z "${msg_file}" || ! -f "${msg_file}" ]]; then
+  exit 0
+fi
+
+tmp="$(mktemp)"
+python3 - "$msg_file" "$tmp" <<'PY'
+import re, sys
+
+src, dst = sys.argv[1], sys.argv[2]
+text = open(src, encoding="utf-8").read().splitlines(keepends=True)
+
+coauthor = re.compile(r"^Co-authored-by:\s*(.*)$", re.IGNORECASE)
+agent_line = re.compile(
+    r"("
+    r"cursoragent@cursor\.com|"
+    r"noreply@anthropic\.com|"
+    r"@anthropic\.com>|"
+    r"^[^<]*\b(Cursor|Claude|Codex|OpenCode|Gemini|GPT-\d)\b"
+    r")",
+    re.IGNORECASE,
+)
+generated = re.compile(
+    r"^(🤖\s*)?Generated with\b.*(Claude|Cursor|Codex|OpenCode)\b",
+    re.IGNORECASE,
+)
+
+out = []
+for line in text:
+    body = line.rstrip("\n")
+    m = coauthor.match(body)
+    if m and agent_line.search(m.group(1)):
+        continue
+    if generated.match(body):
+        continue
+    out.append(line)
+
+while out and out[-1].strip() == "":
+    out.pop()
+if out and not out[-1].endswith("\n"):
+    out[-1] += "\n"
+open(dst, "w", encoding="utf-8").writelines(out)
+PY
+mv "$tmp" "$msg_file"
+
+# Chain to the repository's own commit-msg hook when using a global hooksPath.
+git_dir="$(git rev-parse --git-common-dir 2>/dev/null || true)"
+if [[ -n "${git_dir}" ]]; then
+  local_hook="${git_dir}/hooks/commit-msg"
+  if [[ -x "${local_hook}" ]]; then
+    this="$(python3 -c 'import os,sys; print(os.path.realpath(sys.argv[1]))' "$0")"
+    other="$(python3 -c 'import os,sys; print(os.path.realpath(sys.argv[1]))' "${local_hook}")"
+    if [[ "${this}" != "${other}" ]]; then
+      "${local_hook}" "$@"
+    fi
+  fi
+fi

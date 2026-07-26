@@ -80,15 +80,11 @@ in
       fi
 
       if command -v npm >/dev/null 2>&1; then
-        echo "Updating gh-axi and lavish-axi..."
-        npm install -g gh-axi lavish-axi
-        # PromptScript has no global skills dir; target agents that do.
-        npx --yes skills add kunchenguid/gh-axi --skill gh-axi -y -g \
-          --agent claude-code cursor codex opencode || true
-        npx --yes skills add kunchenguid/lavish-axi --skill lavish -y -g \
-          --agent claude-code cursor codex opencode || true
+        # Install AXI CLIs + skills and link them into Claude/Codex/Cursor/opencode.
+        bash "${dotfiles}/home/scripts/sync-axi-skills.sh"
       else
-        echo "npm not on PATH yet (Homebrew node); skip gh-axi/lavish-axi until next rebuild."
+        echo "error: npm not on PATH yet (Homebrew node); cannot sync AXI skills" >&2
+        exit 1
       fi
 
       if [ -d "$HOME/firstmate/.git" ]; then
@@ -126,6 +122,8 @@ in
       cc = "claude";
       co = "codex";
       ca = "cursor-agent";
+      # Overrides macOS /usr/bin/nm (symbol dumper) in interactive zsh.
+      nm = "no-mistakes";
     };
   };
 
@@ -135,6 +133,9 @@ in
       name = "ctt062";
       email = "chongtt062@gmail.com";
     };
+    # Global hooks so agent Co-authored-by trailers are stripped in every repo.
+    # The commit-msg hook chains to each repo's .git/hooks/commit-msg when present.
+    settings.core.hooksPath = "${config.home.homeDirectory}/.config/git/hooks";
   };
 
   programs.starship = {
@@ -151,6 +152,10 @@ in
   };
 
   # Edit-in-place: the real file stays in my repo, ~/.config just points at it.
+  home.file.".config/git/hooks" = {
+    source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.config/git/hooks";
+    force = true;
+  };
   home.file.".config/wezterm".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.config/wezterm";
   home.file.".config/nvim".source =

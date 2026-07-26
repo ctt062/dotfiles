@@ -68,7 +68,7 @@ That command:
 1. Runs `nix flake update` (latest nixpkgs / nix-darwin / home-manager)
 2. Runs `darwin-rebuild switch`
 3. Upgrades all declared Homebrew brews/casks (`onActivation.upgrade` + `greedyCasks`)
-4. Refreshes extra tools from `home.nix` activation (no-mistakes, treehouse, gh-axi, lavish-axi, firstmate)
+4. Refreshes extra tools from `home.nix` activation (no-mistakes, treehouse, AXI skills for all agents, firstmate)
 
 Configs under `home/` are symlinked live with `mkOutOfStoreSymlink`, so Neovim / WezTerm / herdr / agent policy edits take effect without a rebuild. Run `./rebuild.sh` when you change packages, system defaults, or `home.nix` / `configuration.nix` / `flake.nix`. Commit `flake.lock` when an update looks good.
 
@@ -79,7 +79,9 @@ Configs under `home/` are symlinked live with `mkOutOfStoreSymlink`, so Neovim /
 - **Homebrew zap**: `homebrew.onActivation.cleanup = "zap"` removes anything not listed in `brews` / `casks`. Add packages you want to keep before switching.
 - **Homebrew upgrades**: `onActivation.autoUpdate` only refreshes formulae metadata; `onActivation.upgrade = true` is what actually upgrades Claude Code, Codex, etc.
 - **Agent policy**: `home/AGENTS.md` is installed for Claude, Codex, Cursor, and opencode. Cursor also gets a local `global-agents` plugin so the policy is always applied; reload Cursor after the first install.
-- **Shell aliases**: `cc` → claude, `co` → codex, `ca` → cursor-agent
+- **No agent co-authors**: global `~/.config/git/hooks/commit-msg` strips AI `Co-authored-by` trailers; Claude `attribution.commit/pr` are empty. Soft policy lives in `home/AGENTS.md`.
+- **AXI skills**: every rebuild runs `home/scripts/sync-axi-skills.sh` so `gh-axi`, `lavish`, and `no-mistakes` are installed and linked for Claude, Codex, Cursor, and opencode. Agents should prefer AXI over MCP / raw `gh` for those jobs.
+- **Shell aliases**: `cc` → claude, `co` → codex, `ca` → cursor-agent, `nm` → no-mistakes (overrides macOS `nm`)
 
 ## Repo layout
 
