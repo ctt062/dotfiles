@@ -7,7 +7,7 @@ This is the shared policy for every agent on this machine. `home.nix` installs i
 ## Rules
 
 - Never use the em dash "—". Use plain dash "-" instead.
-- When writing commit messages, never auto-add your agent name as a co-author.
+- When writing commit messages, never auto-add your agent name as a co-author. (I do not want to see Co-authored-by: Cursor <cursoragent@cursor.com> in the commit message)
 - Never manually modify CHANGELOG.md files or any files marked as auto-generated.
 - When making technical decisions, do not give much weight to development cost. Prefer quality, simplicity, robustness, scalability, and long-term maintainability.
 - When fixing bugs, always start by reproducing the bug in an E2E setting as close as possible to how an end user would experience it, so the fix addresses the real problem.
