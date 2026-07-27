@@ -80,10 +80,18 @@ in
       fi
 
       if command -v npm >/dev/null 2>&1; then
+        echo "Updating pi..."
+        # Official install uses --ignore-scripts; pi does not need lifecycle scripts.
+        npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+        if ! command -v pi >/dev/null 2>&1; then
+          echo "error: pi missing after install" >&2
+          exit 1
+        fi
+
         # Install AXI CLIs + skills and link them into Claude/Codex/Cursor/opencode.
         bash "${dotfiles}/home/scripts/sync-axi-skills.sh"
       else
-        echo "error: npm not on PATH yet (Homebrew node); cannot sync AXI skills" >&2
+        echo "error: npm not on PATH yet (Homebrew node); cannot install pi / sync AXI skills" >&2
         exit 1
       fi
 

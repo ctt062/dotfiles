@@ -68,7 +68,7 @@ That command:
 1. Runs `nix flake update` (latest nixpkgs / nix-darwin / home-manager)
 2. Runs `darwin-rebuild switch`
 3. Upgrades all declared Homebrew brews/casks (`onActivation.upgrade` + `greedyCasks`)
-4. Refreshes extra tools from `home.nix` activation (no-mistakes, treehouse, AXI skills for all agents, firstmate)
+4. Refreshes extra tools from `home.nix` activation (no-mistakes, treehouse, pi, AXI skills for all agents, firstmate)
 
 Configs under `home/` are symlinked live with `mkOutOfStoreSymlink`, so Neovim / WezTerm / herdr / agent policy edits take effect without a rebuild. Run `./rebuild.sh` when you change packages, system defaults, or `home.nix` / `configuration.nix` / `flake.nix`. Commit `flake.lock` when an update looks good.
 
