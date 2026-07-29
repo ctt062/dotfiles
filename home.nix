@@ -125,6 +125,7 @@ in
       ".." = "cd ..";
       add = "git add .";
       gs = "git status";
+      gc = "git commit -m";
       push = "git push";
       pull = "git pull";
       m = "git switch main";
