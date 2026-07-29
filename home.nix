@@ -124,6 +124,7 @@ in
     shellAliases = {
       ".." = "cd ..";
       add = "git add .";
+      gs = "git status";
       push = "git push";
       pull = "git pull";
       m = "git switch main";
