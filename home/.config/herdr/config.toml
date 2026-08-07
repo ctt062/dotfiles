@@ -23,3 +23,7 @@ delivery = "system"
 
 [experimental]
 pane_history = false
+
+[theme]
+name = "terminal"
+auto_switch = false
