@@ -88,7 +88,7 @@ in
           exit 1
         fi
 
-        # Install AXI CLIs + skills and link them into Claude/Codex/Cursor/opencode.
+        # Install AXI CLIs + skills and link them into Claude/Codex/Cursor/opencode/Grok.
         bash "${dotfiles}/home/scripts/sync-axi-skills.sh"
       else
         echo "error: npm not on PATH yet (Homebrew node); cannot install pi / sync AXI skills" >&2
@@ -132,6 +132,7 @@ in
       cc = "claude";
       co = "codex";
       ca = "cursor-agent";
+      gk = "grok";
       # Overrides macOS /usr/bin/nm (symbol dumper) in interactive zsh.
       nm = "no-mistakes";
     };
@@ -180,6 +181,9 @@ in
   home.file.".codex/AGENTS.md".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/AGENTS.md";
   home.file.".config/opencode/AGENTS.md".source =
+    config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/AGENTS.md";
+  # Grok Build loads global rules from ~/.grok/ (AGENTS.md family).
+  home.file.".grok/AGENTS.md".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/AGENTS.md";
   # Cursor does not treat ~/.cursor/AGENTS.md as a documented global rules source.
   # Keep the symlink as the live file agents are told to Read, and also install a

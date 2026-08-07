@@ -10,6 +10,7 @@ AGENT_SKILL_DIRS=(
   "${HOME}/.codex/skills"
   "${HOME}/.cursor/skills"
   "${HOME}/.config/opencode/skills"
+  "${HOME}/.grok/skills"
 )
 
 if ! command -v npm >/dev/null 2>&1; then
@@ -22,7 +23,7 @@ npm install -g gh-axi lavish-axi
 
 echo "Installing AXI skills into ${CANONICAL}..."
 # skills CLI treats Cursor/Codex/OpenCode as "universal" (~/.agents/skills) and only
-# symlinks Claude. We still target all four so metadata stays correct, then force
+# symlinks Claude. We still target the listed agents so metadata stays correct, then force
 # per-agent links below so each agent globalSkillsDir actually has the skills.
 npx --yes skills add kunchenguid/gh-axi --skill gh-axi -y -g \
   -a claude-code -a cursor -a codex -a opencode
@@ -65,4 +66,4 @@ for skill in "${AXI_SKILLS[@]}"; do
   done
 done
 
-echo "AXI skills ready for Claude, Codex, Cursor, and opencode."
+echo "AXI skills ready for Claude, Codex, Cursor, opencode, and Grok."

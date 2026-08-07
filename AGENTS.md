@@ -2,7 +2,7 @@
 
 Read this file before doing any work in this repo.
 
-Before anything else, read and follow the global agent instructions in `home/AGENTS.md` (also available live as `~/.cursor/AGENTS.md`). That file is the shared policy installed for Claude, Codex, Cursor, and opencode via `home.nix`. Cursor also loads it globally through the `global-agents` local plugin.
+Before anything else, read and follow the global agent instructions in `home/AGENTS.md` (also available live as `~/.cursor/AGENTS.md`). That file is the shared policy installed for Claude, Codex, Cursor, opencode, and Grok via `home.nix`. Cursor also loads it globally through the `global-agents` local plugin.
 
 ## Deliberate decisions
 

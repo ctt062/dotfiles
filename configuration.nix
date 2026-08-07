@@ -60,6 +60,7 @@
       "claude-code"
       "cursor-cli"
       "codex"
+      "grok-build"
       "opensuperwhisper"
     ];
   };

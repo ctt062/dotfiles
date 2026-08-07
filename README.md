@@ -9,7 +9,7 @@ Stack highlights:
 - **Terminal**: WezTerm (Hack Nerd Font, translucent window)
 - **Editor**: Neovim via lazy.nvim
 - **Shell**: zsh + starship
-- **Agents**: shared `home/AGENTS.md` for Claude, Codex, Cursor, and opencode
+- **Agents**: shared `home/AGENTS.md` for Claude, Codex, Cursor, opencode, and Grok
 - **Multiplexer**: herdr (tmux-style agent workspace)
 
 ## What this builds
@@ -26,7 +26,7 @@ Homebrew apps currently declared:
 
 | Brews | Casks |
 | --- | --- |
-| herdr, gnhf, node, gh, tmux, opencode | wezterm, claude-code, cursor-cli, codex, opensuperwhisper |
+| herdr, gnhf, node, gh, tmux, opencode | wezterm, claude-code, cursor-cli, codex, grok-build, opensuperwhisper |
 
 ## Prerequisites
 
@@ -78,10 +78,10 @@ Configs under `home/` are symlinked live with `mkOutOfStoreSymlink`, so Neovim /
 - **Host label**: `"mac"` must match in `flake.nix`, `rebuild.sh`, and `bootstrap.sh`
 - **Homebrew zap**: `homebrew.onActivation.cleanup = "zap"` removes anything not listed in `brews` / `casks`. Add packages you want to keep before switching.
 - **Homebrew upgrades**: `onActivation.autoUpdate` only refreshes formulae metadata; `onActivation.upgrade = true` is what actually upgrades Claude Code, Codex, etc.
-- **Agent policy**: `home/AGENTS.md` is installed for Claude, Codex, Cursor, and opencode. Cursor also gets a local `global-agents` plugin so the policy is always applied; reload Cursor after the first install.
+- **Agent policy**: `home/AGENTS.md` is installed for Claude, Codex, Cursor, opencode, and Grok. Cursor also gets a local `global-agents` plugin so the policy is always applied; reload Cursor after the first install.
 - **No agent co-authors**: every rebuild runs `home/scripts/sync-cursor-attribution.sh` (Cursor CLI + IDE attribution off), keeps Claude `attribution` empty, and installs global git hooks that strip AI `Co-authored-by` / `Made-with: Cursor` trailers. Soft policy lives in `home/AGENTS.md`.
-- **AXI skills**: every rebuild runs `home/scripts/sync-axi-skills.sh` so `gh-axi`, `lavish`, and `no-mistakes` are installed and linked for Claude, Codex, Cursor, and opencode. Agents should prefer AXI over MCP / raw `gh` for those jobs.
-- **Shell aliases**: `cc` → claude, `co` → codex, `ca` → cursor-agent, `nm` → no-mistakes (overrides macOS `nm`)
+- **AXI skills**: every rebuild runs `home/scripts/sync-axi-skills.sh` so `gh-axi`, `lavish`, and `no-mistakes` are installed and linked for Claude, Codex, Cursor, opencode, and Grok. Agents should prefer AXI over MCP / raw `gh` for those jobs.
+- **Shell aliases**: `cc` → claude, `co` → codex, `ca` → cursor-agent, `gk` → grok, `nm` → no-mistakes (overrides macOS `nm`)
 
 ## Repo layout
 
