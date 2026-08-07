@@ -13,14 +13,14 @@ That path is a symlink to `~/.dotfiles/home/AGENTS.md`, the single source of tru
 
 # Global agent instructions
 
-Read and follow this file before doing any work. This is mandatory for every agent on this machine (Claude Code, Codex, Cursor, opencode, and any other agent harness).
+Read and follow this file before doing any work. This is mandatory for every agent on this machine (Claude Code, Codex, Cursor, opencode, Grok, and any other agent harness).
 
-`home.nix` installs this file for Claude (`~/.claude/CLAUDE.md`), Codex (`~/.codex/AGENTS.md`), Cursor (`~/.cursor/AGENTS.md`), and opencode (`~/.config/opencode/AGENTS.md`).
+`home.nix` installs this file for Claude (`~/.claude/CLAUDE.md`), Codex (`~/.codex/AGENTS.md`), Cursor (`~/.cursor/AGENTS.md`), opencode (`~/.config/opencode/AGENTS.md`), and Grok (`~/.grok/AGENTS.md`).
 
 ## Rules
 
 - Never use the em dash "—". Use plain dash "-" instead.
-- Never add yourself (or any AI / agent) as a git co-author unless the user explicitly asks for it. This applies to Cursor, Claude, Codex, opencode, and every other agent identity.
+- Never add yourself (or any AI / agent) as a git co-author unless the user explicitly asks for it. This applies to Cursor, Claude, Codex, opencode, Grok, and every other agent identity.
   - Do not pass `--trailer "Co-authored-by: ..."` (or any `Co-authored-by` / `Co-Authored-By` text) to `git commit`.
   - Forbidden example: `git commit --trailer "Co-authored-by: Cursor <cursoragent@cursor.com>"`.
   - Commit with only `-m` / HEREDOC message body. No agent attribution trailers in commits or PR bodies.
