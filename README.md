@@ -81,6 +81,7 @@ Configs under `home/` are symlinked live with `mkOutOfStoreSymlink`, so Neovim /
 - **Agent policy**: `home/AGENTS.md` is installed for Claude, Codex, Cursor, opencode, and Grok. Cursor also gets a local `global-agents` plugin so the policy is always applied; reload Cursor after the first install.
 - **No agent co-authors**: every rebuild runs `home/scripts/sync-cursor-attribution.sh` (Cursor CLI + IDE attribution off), keeps Claude `attribution` empty, and installs global git hooks that strip AI `Co-authored-by` / `Made-with: Cursor` trailers. Soft policy lives in `home/AGENTS.md`.
 - **AXI skills**: every rebuild runs `home/scripts/sync-axi-skills.sh` so `gh-axi`, `lavish`, and `no-mistakes` are installed and linked for Claude, Codex, Cursor, opencode, and Grok. Agents should prefer AXI over MCP / raw `gh` for those jobs.
+- **no-mistakes agents**: every rebuild runs `home/scripts/sync-no-mistakes-config.sh` so `~/.no-mistakes/config.yaml` prefers pipeline agents in this order: Grok (`acp:grok-build`), Cursor, Claude, Codex, OpenCode, Pi. Other config keys are left alone.
 - **Shell aliases**: `cc` → claude, `co` → codex, `ca` → cursor-agent, `gk` → grok, `nm` → no-mistakes (overrides macOS `nm`)
 
 ## Repo layout

@@ -72,6 +72,9 @@ in
       fi
       ln -sfn "$HOME/.no-mistakes/bin/no-mistakes" "$HOME/.local/bin/no-mistakes"
 
+      echo "Syncing no-mistakes agent preference (Grok, Cursor, Claude, Codex, OpenCode, Pi)..."
+      bash "${dotfiles}/home/scripts/sync-no-mistakes-config.sh"
+
       echo "Updating treehouse..."
       curl -fsSL https://kunchenguid.github.io/treehouse/install.sh | sh || true
       if [ ! -x "$HOME/.local/bin/treehouse" ]; then
