@@ -75,6 +75,9 @@ in
       echo "Syncing no-mistakes agent preference (Grok, Cursor, Claude, Codex, OpenCode, Pi)..."
       bash "${dotfiles}/home/scripts/sync-no-mistakes-config.sh"
 
+      echo "Syncing OpenClaw default model preference (Grok / xAI)..."
+      bash "${dotfiles}/home/scripts/sync-openclaw-config.sh"
+
       echo "Updating treehouse..."
       curl -fsSL https://kunchenguid.github.io/treehouse/install.sh | sh || true
       if [ ! -x "$HOME/.local/bin/treehouse" ]; then
@@ -105,6 +108,9 @@ in
         echo "Cloning firstmate into ~/firstmate..."
         git clone https://github.com/kunchenguid/firstmate "$HOME/firstmate"
       fi
+
+      echo "Syncing firstmate crew harness (grok)..."
+      bash "${dotfiles}/home/scripts/sync-firstmate-config.sh"
     '';
   };
 

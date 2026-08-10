@@ -82,6 +82,8 @@ Configs under `home/` are symlinked live with `mkOutOfStoreSymlink`, so Neovim /
 - **No agent co-authors**: every rebuild runs `home/scripts/sync-cursor-attribution.sh` (Cursor CLI + IDE attribution off), keeps Claude `attribution` empty, and installs global git hooks that strip AI `Co-authored-by` / `Made-with: Cursor` trailers. Soft policy lives in `home/AGENTS.md`.
 - **AXI skills**: every rebuild runs `home/scripts/sync-axi-skills.sh` so `gh-axi`, `lavish`, and `no-mistakes` are installed and linked for Claude, Codex, Cursor, opencode, and Grok. Agents should prefer AXI over MCP / raw `gh` for those jobs.
 - **no-mistakes agents**: every rebuild runs `home/scripts/sync-no-mistakes-config.sh` so `~/.no-mistakes/config.yaml` prefers pipeline agents in this order: Grok (`acp:grok-build`), Cursor, Claude, Codex, OpenCode, Pi. Other config keys are left alone.
+- **OpenClaw default model**: every rebuild runs `home/scripts/sync-openclaw-config.sh` so `~/.openclaw/openclaw.json` uses primary `xai/grok-4.5` and enables the xAI plugin. Tokens and channel secrets are never written.
+- **Firstmate crew harness**: every rebuild runs `home/scripts/sync-firstmate-config.sh` so `config/crew-harness` is `grok` in known firstmate homes (workers spawn on Grok).
 - **Shell aliases**: `cc` → claude, `co` → codex, `ca` → cursor-agent, `gk` → grok, `nm` → no-mistakes (overrides macOS `nm`)
 
 ## Repo layout
