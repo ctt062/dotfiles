@@ -65,12 +65,13 @@ Edit files in this repo, then:
 
 That command:
 
-1. Runs `nix flake update` (latest nixpkgs / nix-darwin / home-manager)
-2. Runs `darwin-rebuild switch`
-3. Upgrades all declared Homebrew brews/casks (`onActivation.upgrade` + `greedyCasks`)
-4. Refreshes extra tools from `home.nix` activation (no-mistakes, treehouse, pi, AXI skills for all agents, firstmate)
+1. Runs `darwin-rebuild switch` against the pinned `flake.lock` (no `nix flake update`)
+2. Upgrades all declared Homebrew brews/casks (`onActivation.upgrade` + `greedyCasks`)
+3. Refreshes extra tools from `home.nix` activation (no-mistakes, treehouse, pi, AXI skills for all agents, firstmate)
 
-Configs under `home/` are symlinked live with `mkOutOfStoreSymlink`, so Neovim / WezTerm / herdr / agent policy edits take effect without a rebuild. Run `./rebuild.sh` when you change packages, system defaults, or `home.nix` / `configuration.nix` / `flake.nix`. Commit `flake.lock` when an update looks good.
+A successful `./rebuild.sh` leaves the git worktree clean. To bump flake inputs intentionally, run `nix flake update` separately, review `flake.lock`, then commit it.
+
+Configs under `home/` are symlinked live with `mkOutOfStoreSymlink`, so Neovim / WezTerm / herdr / agent policy edits take effect without a rebuild. Run `./rebuild.sh` when you change packages, system defaults, or `home.nix` / `configuration.nix` / `flake.nix`.
 
 ## Important knobs
 

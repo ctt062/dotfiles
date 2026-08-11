@@ -10,6 +10,7 @@ Do not silently revert these:
 
 - `homebrew.onActivation.cleanup = "zap"` in `configuration.nix` is intentional. It forces the good habit of declaring every Homebrew package in the Nix config instead of installing things ad-hoc, which keeps the machine reproducible. Do not soften it to `uninstall` or `none`. Users are warned about its effect in README.md; this note is for anyone tempted to change the setting itself.
 - `homebrew.onActivation.upgrade = true` and `greedyCasks = true` are intentional so `./rebuild.sh` upgrades Claude Code, Codex, and other declared Homebrew packages. Do not turn upgrade back off; `autoUpdate` alone only refreshes formulae metadata.
+- `./rebuild.sh` must not run `nix flake update`. Rebuild applies the pinned `flake.lock` and should leave a clean git worktree. Bump inputs with a deliberate `nix flake update` + commit, not as a side effect of every rebuild.
 - Never commit `.no-mistakes/` validation evidence to this public repo. `.no-mistakes/` is gitignored; if a validation pipeline stages evidence into a branch, drop it before merging.
 
 ## Maintaining this file
