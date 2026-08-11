@@ -184,6 +184,18 @@ in
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.config/herdr";
   home.file.".claude/settings.json".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.claude/settings.json";
+  home.file.".codex/config.toml" = {
+    source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.codex/config.toml";
+    force = true;
+  };
+  home.file.".codex/hooks.json" = {
+    source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.codex/hooks.json";
+    force = true;
+  };
+  home.file.".grok/config.toml" = {
+    source = config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/.grok/config.toml";
+    force = true;
+  };
 
   home.file.".claude/CLAUDE.md".source =
     config.lib.file.mkOutOfStoreSymlink "${dotfiles}/home/AGENTS.md";

@@ -1,0 +1,39 @@
+personality = "pragmatic"
+model = "gpt-5.5"
+model_reasoning_effort = "medium"
+
+[projects."/Users/ctt/.no-mistakes/repos"]
+trust_level = "trusted"
+
+[projects."/Users/ctt/github/ctt062/dotfiles"]
+trust_level = "trusted"
+
+[projects."/Users/ctt/github"]
+trust_level = "trusted"
+
+[projects."/Users/ctt/github/chongtt-portfolio"]
+trust_level = "trusted"
+
+[projects."/Users/ctt/github/firstmate/projects/chongtt-portfolio"]
+trust_level = "trusted"
+
+[projects."/Users/ctt/github/firstmate/projects/ctt062"]
+trust_level = "trusted"
+
+[projects."/Users/ctt/github/dotfiles"]
+trust_level = "trusted"
+
+[features]
+hooks = true
+
+[hooks.state]
+
+[hooks.state."/Users/ctt/.codex/hooks.json:session_start:0:0"]
+trusted_hash = "sha256:ecb57ed7c7385a40f8254f8f83ad21c71bda9b5860a3925220a64eceaaf041ea"
+
+[hooks.state."/Users/ctt/.codex/hooks.json:session_start:1:0"]
+trusted_hash = "sha256:2035963d8116b7f9c8418a165ee1d22cc62fa076e6536be410a8534452869541"
+
+[tui]
+status_line = ["model-with-reasoning", "current-dir"]
+status_line_use_colors = true
