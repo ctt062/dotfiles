@@ -67,7 +67,7 @@ That command:
 
 1. Runs `darwin-rebuild switch` against the pinned `flake.lock` (no `nix flake update`)
 2. Upgrades all declared Homebrew brews/casks (`onActivation.upgrade` + `greedyCasks`)
-3. Refreshes extra tools from `home.nix` activation (no-mistakes, treehouse, pi, AXI skills for all agents, firstmate)
+3. Refreshes extra tools from `home.nix` activation (no-mistakes, treehouse, pi, AXI + Obsidian skills for all agents, firstmate)
 
 A successful `./rebuild.sh` leaves the git worktree clean. To bump flake inputs intentionally, run `nix flake update` separately, review `flake.lock`, then commit it.
 
@@ -82,7 +82,8 @@ Configs under `home/` are symlinked live with `mkOutOfStoreSymlink`, so Neovim /
 - **Agent policy**: `home/AGENTS.md` is installed for Claude, Codex, Cursor, opencode, and Grok. Cursor also gets a local `global-agents` plugin so the policy is always applied; reload Cursor after the first install.
 - **Agent preferences**: every rebuild deploys saved Codex `config.toml` + hooks and Grok `config.toml` from `home/agent-configs/`. They are copied into the agent directories instead of being live-linked, so agent writes never alter the saved payload. Cursor CLI preferences are not committed wholesale because that file also carries auth/account cache data.
 - **No agent co-authors**: every rebuild runs `home/scripts/sync-cursor-attribution.sh` (Cursor CLI + IDE attribution off), keeps Claude `attribution` empty, and installs global git hooks that strip AI `Co-authored-by` / `Made-with: Cursor` trailers. Soft policy lives in `home/AGENTS.md`.
-- **AXI skills**: every rebuild runs `home/scripts/sync-axi-skills.sh` so `gh-axi`, `lavish`, and `no-mistakes` are installed and linked for Claude, Codex, Cursor, opencode, and Grok. Agents should prefer AXI over MCP / raw `gh` for those jobs.
+- **AXI skills**: every rebuild runs `home/scripts/sync-agent-skills.sh` so `gh-axi`, `lavish`, and `no-mistakes` are installed and linked for Claude, Codex, Cursor, opencode, and Grok. Agents should prefer AXI over MCP / raw `gh` for those jobs.
+- **Obsidian skills**: the same script installs `kepano/obsidian-skills` globally (`defuddle`, `json-canvas`, `obsidian-bases`, `obsidian-cli`, `obsidian-markdown`) and links them for those agents.
 - **no-mistakes agents**: every rebuild runs `home/scripts/sync-no-mistakes-config.sh` so `~/.no-mistakes/config.yaml` prefers pipeline agents in this order: Grok (`acp:grok-build`), Cursor, Claude, Codex, OpenCode, Pi. Other config keys are left alone.
 - **OpenClaw default model**: every rebuild runs `home/scripts/sync-openclaw-config.sh` so `~/.openclaw/openclaw.json` uses primary `xai/grok-4.5` and enables the xAI plugin. Tokens and channel secrets are never written.
 - **Firstmate crew harness**: every rebuild runs `home/scripts/sync-firstmate-config.sh` so `config/crew-harness` is `grok` in known firstmate homes (workers spawn on Grok).

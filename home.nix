@@ -94,10 +94,11 @@ in
           exit 1
         fi
 
-        # Install AXI CLIs + skills and link them into Claude/Codex/Cursor/opencode/Grok.
-        bash "${dotfiles}/home/scripts/sync-axi-skills.sh"
+        # Install AXI CLIs + declared global skills and link them into
+        # Claude/Codex/Cursor/opencode/Grok.
+        bash "${dotfiles}/home/scripts/sync-agent-skills.sh"
       else
-        echo "error: npm not on PATH yet (Homebrew node); cannot install pi / sync AXI skills" >&2
+        echo "error: npm not on PATH yet (Homebrew node); cannot install pi / sync agent skills" >&2
         exit 1
       fi
 
