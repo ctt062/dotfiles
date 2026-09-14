@@ -47,6 +47,6 @@ after_out="$(herdr)"
 [[ "$after" == "$work/brew/bin/herdr" && "$after_out" == "brew-herdr" ]] \
   || fail "expected Homebrew herdr after activation (got $after / $after_out)"
 [[ ! -e "$HOME/.local/bin/herdr" ]] \
-  || fail "~/.local/bin/herdr still present after activation"
+  || fail "$HOME/.local/bin/herdr still present after activation"
 
 pass "activation clears ~/.local/bin/herdr; Homebrew herdr wins on PATH"
