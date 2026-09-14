@@ -32,6 +32,26 @@
     finder.CreateDesktop = false;          # clean desktop
     trackpad.Clicking = true;              # tap to click
   };
+  # Globe+Q Quick Note makes the fn/globe key wait to see if Q follows.
+  # Flip only that hotkey so other shortcuts stay untouched.
+  #
+  # Fn/globe language switch also waits on Slow Keys acceptance delay even
+  # when Slow Keys is off. 0 is instant (Accessibility slider fully left).
+  # Do not use system.defaults.CustomUserPreferences for
+  # com.apple.universalaccess: `defaults write` is TCC-blocked and aborts
+  # darwin-rebuild because the activate script runs with `set -e`.
+  system.activationScripts.postActivation.text = ''
+    plist="/Users/${user}/Library/Preferences/com.apple.symbolichotkeys.plist"
+    if [ -f "$plist" ]; then
+      sudo -u ${user} /usr/libexec/PlistBuddy -c 'Set :AppleSymbolicHotKeys:190:enabled false' "$plist" || true
+    fi
+    ua="/Users/${user}/Library/Preferences/com.apple.universalaccess.plist"
+    if [ -f "$ua" ]; then
+      sudo -u ${user} /usr/libexec/PlistBuddy -c 'Set :slowKeyDelay 0' "$ua" \
+        || sudo -u ${user} /usr/libexec/PlistBuddy -c 'Add :slowKeyDelay integer 0' "$ua" \
+        || true
+    fi
+  '';
   nix-homebrew = {
     enable = true;
     inherit user;
