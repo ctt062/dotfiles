@@ -92,7 +92,7 @@ echo "==> Reproducing pre-fix dirty flake.lock with base rebuild.sh ($BASE_COMMI
 old_script="$(mktemp "${TMPDIR:-/tmp}/rebuild.old.XXXXXX")"
 git -C "$ROOT" show "${BASE_COMMIT}:rebuild.sh" >"$old_script"
 old_work="$(run_rebuild "$old_script" old)"
-# shellcheck disable=SC1090
+# shellcheck disable=SC1090,SC1091
 source "$old_work/result.env"
 old_calls="$(cat "$old_work/calls.log")"
 echo "--- old stdout ---"
@@ -113,7 +113,7 @@ pass "old rebuild.sh dirtied flake.lock via nix flake update"
 echo
 echo "==> Verifying fixed rebuild.sh keeps flake.lock clean"
 new_work="$(run_rebuild "$ROOT/rebuild.sh" new)"
-# shellcheck disable=SC1090
+# shellcheck disable=SC1090,SC1091
 source "$new_work/result.env"
 new_calls="$(cat "$new_work/calls.log")"
 echo "--- new stdout ---"
