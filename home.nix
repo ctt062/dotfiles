@@ -62,6 +62,13 @@ in
     installExtraTools = config.lib.dag.entryAfter [ "writeBoundary" ] ''
       mkdir -p "$HOME/.local/bin"
 
+      # Herdr is Homebrew-managed (configuration.nix). A leftover
+      # ~/.local/bin/herdr shadows brew upgrades because .local/bin is first on PATH.
+      if [ -e "$HOME/.local/bin/herdr" ]; then
+        echo "Removing ~/.local/bin/herdr so Homebrew herdr is on PATH..."
+        rm -f "$HOME/.local/bin/herdr"
+      fi
+
       echo "Updating no-mistakes..."
       # Install script ends with `daemon restart`, which can fail outside a
       # no-mistakes repo (gate_context). Treat the binary as the success signal.
