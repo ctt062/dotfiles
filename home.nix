@@ -39,6 +39,15 @@ in
     # the font everything renders in
     nerd-fonts.hack
     unzip
+    # pdflatex for CV / LaTeX
+    (texlive.combine {
+      inherit (texlive)
+        scheme-medium
+        collection-latexextra
+        collection-pictures
+        fontawesome5
+        cfr-lm;
+    })
   ];
   fonts.fontconfig.enable = true;
   home.sessionVariables.EDITOR = "nvim";
